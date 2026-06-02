@@ -1,0 +1,35 @@
+{
+  "checkpoint": "thera-rdn-air.pkl",
+  "backbone": "rdn",
+  "size": "air",
+  "data_dir": ".",
+  "eval_set": "shuffled2D_test_HR",
+  "eval_scale": 4,
+  "save_dir": "eval_outputs_air",
+  "save_lr_dir": "shuffled2D_test_LR_air",
+  "patch_size_dec": 64,
+  "geo_ensemble": false,
+  "y_only": false,
+  "border_crop": 4,
+  "run_save_dir": "eval_outputs_air/ours_shuffled2D_test_HR_rdn/4",
+  "lr_save_dir": "shuffled2D_test_LR_air/shuffled2D_test_HR/4",
+  "metrics": {
+    "PSNR": 31.7977,
+    "MAE": 0.02736,
+    "MSE": 0.00189
+  },
+  "timing": {
+    "count": 100,
+    "min_seconds": 0.16335719299968332,
+    "max_seconds": 3.931393142998786,
+    "avg_seconds": 0.26891706767981305,
+    "total_seconds": 26.891706767981304,
+    "post_warmup": {
+      "count": 99,
+      "min_seconds": 0.16335719299968332,
+      "max_seconds": 0.29324870699929306,
+      "avg_seconds": 0.23192235984830828,
+      "total_seconds": 22.96031362498252
+    }
+  }
+}

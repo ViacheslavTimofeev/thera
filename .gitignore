@@ -161,3 +161,10 @@ cython_debug/
 
 # models
 *.pkl
+
+# images
+shuffled2D_test_HR/
+shuffled2D_test_LR/
+shuffled2D_test_LR_air/
+eval_outputs/ours_shuffled2D_test_HR_rdn/
+eval_outputs_air/ours_shuffled2D_test_HR_rdn/

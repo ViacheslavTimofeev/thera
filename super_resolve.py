@@ -26,10 +26,11 @@ jax_core.ShapedArray.__new__ = patched_shaped_array_new
 
 MEAN = jnp.array([.4488, .4371, .4040])
 VAR = jnp.array([.25, .25, .25])
-PATCH_SIZE_DEC = 256
+DEFAULT_PATCH_SIZE_DEC = 256
 
 
-def process_single(source, apply_encoder, apply_decoder, params, target_shape, patch_size_enc):
+def process_single(source, apply_encoder, apply_decoder, params, target_shape,
+                   patch_size_enc, patch_size_dec):
     t = jnp.float32((target_shape[0] / source.shape[1])**-2)[None]
     coords_nearest = jnp.asarray(make_grid(target_shape)[None])
     source_up = interpolate_grid(coords_nearest, source[None])
@@ -43,7 +44,7 @@ def process_single(source, apply_encoder, apply_decoder, params, target_shape, p
 
     out = chunk(
         apply_decoder, 
-        PATCH_SIZE_DEC,
+        patch_size_dec,
         (None, None, (-3, -2), None),
         strategy='fit'
     )(params, encoding, coords, t)
@@ -53,7 +54,8 @@ def process_single(source, apply_encoder, apply_decoder, params, target_shape, p
     return out
 
 
-def process(source, model, params, target_shape, do_ensemble=True, patch_size_enc=None):
+def process(source, model, params, target_shape, do_ensemble=True,
+            patch_size_enc=None, patch_size_dec=DEFAULT_PATCH_SIZE_DEC):
     apply_encoder = jit(model.apply_encoder)
     apply_decoder = jit(model.apply_decoder)
 
@@ -62,7 +64,8 @@ def process(source, model, params, target_shape, do_ensemble=True, patch_size_en
         source_ = jnp.rot90(source, k=i_rot, axes=(-3, -2))
         target_shape_ = tuple(reversed(target_shape)) if i_rot % 2 else target_shape
         out = process_single(
-            source_, apply_encoder, apply_decoder, params, target_shape_, patch_size_enc)
+            source_, apply_encoder, apply_decoder, params, target_shape_,
+            patch_size_enc, patch_size_dec)
         outs.append(jnp.rot90(out, k=i_rot, axes=(-2, -3)))
 
     out = jnp.stack(outs).mean(0).clip(0., 1.)
@@ -90,7 +93,8 @@ def main(args: Namespace):
 
     model = build_thera(3, backbone, size)
 
-    out = process(source, model, params, target_shape, not args.no_ensemble, args.patch)
+    out = process(source, model, params, target_shape, not args.no_ensemble,
+                  args.patch, args.patch_size_dec)
 
     Image.fromarray(np.asarray(out)).save(args.out_file)
 
@@ -104,7 +108,10 @@ def parse_args() -> Namespace:
                         help='Target size (h, w), mutually exclusive with --scale')
     parser.add_argument('--checkpoint', help='Path to checkpoint file')
     parser.add_argument('--no-ensemble', action='store_true', help='Disable geo-ensemble')
-    parser.add_argument('--patch', type=int, default=None, help='Patch size of input image')
+    parser.add_argument('--patch', type=int, default=None,
+                        help='Encoder patch size. Lower values reduce memory usage.')
+    parser.add_argument('--patch-size-dec', type=int, default=DEFAULT_PATCH_SIZE_DEC,
+                        help='Decoder patch size. Lower values reduce memory usage.')
     return parser.parse_args()
 
 
