@@ -89,9 +89,9 @@ def main(args: Namespace):
 
     with open(args.checkpoint, 'rb') as fh:
         check = pickle.load(fh)
-        params, backbone, size = check['model'], check['backbone'], check['size']
+        params = check['model']
 
-    model = build_thera(3, backbone, size)
+    model = build_thera(3)
 
     out = process(source, model, params, target_shape, not args.no_ensemble,
                   args.patch, args.patch_size_dec)

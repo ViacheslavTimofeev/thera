@@ -6,30 +6,30 @@
   "eval_set": "shuffled2D_test_HR",
   "eval_scale": 4,
   "save_dir": "eval_outputs_air",
-  "save_lr_dir": "shuffled2D_test_LR_air",
+  "save_lr_dir": null,
   "patch_size_dec": 64,
   "geo_ensemble": false,
   "y_only": false,
   "border_crop": 4,
   "run_save_dir": "eval_outputs_air/ours_shuffled2D_test_HR_rdn/4",
-  "lr_save_dir": "shuffled2D_test_LR_air/shuffled2D_test_HR/4",
+  "lr_save_dir": null,
   "metrics": {
-    "PSNR": 31.7977,
+    "PSNR": 31.79773,
     "MAE": 0.02736,
     "MSE": 0.00189
   },
   "timing": {
     "count": 100,
-    "min_seconds": 0.16335719299968332,
-    "max_seconds": 3.931393142998786,
-    "avg_seconds": 0.26891706767981305,
-    "total_seconds": 26.891706767981304,
+    "min_seconds": 0.15185078499985138,
+    "max_seconds": 3.912301836000097,
+    "avg_seconds": 0.27068280023000624,
+    "total_seconds": 27.068280023000625,
     "post_warmup": {
       "count": 99,
-      "min_seconds": 0.16335719299968332,
-      "max_seconds": 0.29324870699929306,
-      "avg_seconds": 0.23192235984830828,
-      "total_seconds": 22.96031362498252
+      "min_seconds": 0.15185078499985138,
+      "max_seconds": 0.33486044400001447,
+      "avg_seconds": 0.2338987695656619,
+      "total_seconds": 23.155978187000528
     }
   }
 }

@@ -25,10 +25,8 @@ parser.add_argument('--augment-scale-range', type=float, nargs='+', default=(1.,
 parser.add_argument('--augment-scale-prob', type=float, default=0.5)
 
 # model
-parser.add_argument('--backbone', type=str, default='edsr-baseline')
 parser.add_argument('--init-k', type=float, default=np.sqrt(np.log(4)) / (np.pi ** 2 * 2))
 parser.add_argument('--init-scale', type=float, default=16.0)
-parser.add_argument('--size', type=str, default='pro')
 
 # data
 parser.add_argument('--data-dir', type=str, required=True)

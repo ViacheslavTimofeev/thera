@@ -106,7 +106,9 @@ def train(model, params, data_loaders, optimizer, args):
             with open(args.checkpoint, 'wb') as fh:
                 pickle.dump({
                     'model': jax.device_get(tree_map(lambda x: x[0], params)),
-                    'optimizer': jax.device_get(tree_map(lambda x: x[0], opt_state))
+                    'optimizer': jax.device_get(tree_map(lambda x: x[0], opt_state)),
+                    'backbone': 'rdn',
+                    'size': 'air',
                 }, fh)
 
 
@@ -133,7 +135,7 @@ def main(args):
     ]
 
     sample_source = next(iter(data_loaders[0]))['source']
-    model = build_thera(3, args.backbone, args.size, args.init_k, args.init_scale)
+    model = build_thera(3, args.init_k, args.init_scale)
     params = model.init(jax.random.PRNGKey(args.seed), sample_source)
     print('# params: ', sum(x.size for x in jax.tree_util.tree_leaves(params)))
 

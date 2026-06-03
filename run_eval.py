@@ -12,7 +12,6 @@ from jax import jit
 import jax.numpy as jnp
 from jax.image import resize
 from torch.utils.data import DataLoader
-from torchvision import transforms
 from tqdm import tqdm
 from PIL import Image
 
@@ -154,13 +153,13 @@ def main(args):
 
     with open(args.checkpoint, 'rb') as fh:
         check = pickle.load(fh)
-        params, backbone, size = check['model'], check['backbone'], check['size']
+        params = check['model']
 
-    model = build_thera(3, backbone, size)
+    model = build_thera(3)
     report = {
         'checkpoint': str(args.checkpoint),
-        'backbone': backbone,
-        'size': size,
+        'backbone': 'rdn',
+        'size': 'air',
         'data_dir': str(args.data_dir),
         'eval_set': args.eval_set,
         'eval_scale': args.eval_scale,
@@ -173,7 +172,7 @@ def main(args):
 
     scale = args.eval_scale
     border_crop = scale + 6 if 'DIV2K' in args.eval_set else scale
-    save_dir = (Path(args.save_dir) / ('ours_' + args.eval_set + '_' + backbone) / str(scale)) \
+    save_dir = (Path(args.save_dir) / ('ours_' + args.eval_set + '_rdn') / str(scale)) \
         if args.save_dir else None
     lr_save_dir = (Path(args.save_lr_dir) / args.eval_set / str(scale)) \
         if args.save_lr_dir else None
